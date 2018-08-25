@@ -42,6 +42,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+use onebone\economyapi\EconomyAPI;
 
 class RepairCommand extends PluginCommand{
 	
@@ -86,10 +87,13 @@ class RepairCommand extends PluginCommand{
 			return true;
 		}
 		if($a === "all"){
-			if(!$sender->hasPermission("repair.command.use.all")){
+			if(!$sender->hasPermission("essentials.repair.all")){
 				$sender->sendMessage(TextFormat::RED . "[Error]" . TextFormat::DARK_RED . " You don't have permission to use this command.");
 				return true;
 			}
+			$cost_all = $this->plugin->getConfig("cost_all");
+			 if(EconomyAPI::getInstance()->myMoney($sender) > $cost_all){
+				 EconomyAPI::getInstance()->reduceMoney($sender, $cost_all);
 			foreach($sender->getInventory()->getContents() as $index => $item){
 				if($this->plugin->isRepairable($item)){
 					if($item->getDamage() > 0){
@@ -108,11 +112,17 @@ class RepairCommand extends PluginCommand{
 				}
 				$m .= TextFormat::AQUA . " (Including the equipped Armor)";
 			}
+				  }else{
+                $sender->sendMessage(TF::BOLD . TF::DARK_GRAY . TF::RESET . TF::DARK_RED . "You do not have enough money to repair all");
+              }
 		}else{
-			if(!$sender->hasPermission("repair.command.use.hand")){
+			if(!$sender->hasPermission("essentials.repair.hand")){
 				$sender->sendMessage(TextFormat::RED . "[Error]" . TextFormat::DARK_RED . " You don't have permission to use this command.");
 				return true;
 			}
+			$cost_hand = $this->plugin->getConfig("cost_hand");
+			 if(EconomyAPI::getInstance()->myMoney($player) > $cost_hand){
+				 EconomyAPI::getInstance()->reduceMoney($sender, $cost_hand);
 			$index = $sender->getInventory()->getHeldItemIndex();
 			$item = $sender->getInventory()->getItem($index);
 			if(!$this->plugin->isRepairable($item)){
@@ -125,8 +135,11 @@ class RepairCommand extends PluginCommand{
 				$sender->sendMessage(TextFormat::RED . "[Error] Item does not have any damage");
 			}
 			$m = TextFormat::GREEN . "Item successfully repaired!";
+		}else{
+                $sender->sendMessage(TF::BOLD . TF::DARK_GRAY . TF::RESET . TF::DARK_RED . "You do not have enough money to repair hand! You must have at least $$cost_hand");
 		}
 		$sender->sendMessage($m);
+              }
 		return true;
 	}
 }
