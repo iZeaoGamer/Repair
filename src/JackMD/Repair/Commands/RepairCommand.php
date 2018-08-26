@@ -60,7 +60,7 @@ class RepairCommand extends PluginCommand{
 		$this->setDescription("Access to repair commands.");
 		$this->setUsage("/repair [all:hand]");
 		$this->setAliases(["fix"]);
-		$this->setPermission("repair.command.use");
+		$this->setPermission("essentials.repair.use");
 		$this->plugin = $plugin;
 	}
 	
@@ -91,7 +91,7 @@ class RepairCommand extends PluginCommand{
 				$sender->sendMessage(TextFormat::RED . "[Error]" . TextFormat::DARK_RED . " You don't have permission to use this command.");
 				return true;
 			}
-			$cost_all = $this->plugin->getConfig("cost_all");
+			$cost_all = $this->plugin->getConfig()->getNested("cost_all");
 			 if(EconomyAPI::getInstance()->myMoney($sender) > $cost_all){
 				 EconomyAPI::getInstance()->reduceMoney($sender, $cost_all);
 			foreach($sender->getInventory()->getContents() as $index => $item){
@@ -101,7 +101,7 @@ class RepairCommand extends PluginCommand{
 					}
 				}
 			}
-			$m = TextFormat::GREEN . "All the tools in your inventory were repaired!";
+			$m = TextFormat::GREEN . "All the tools in your inventory were repaired! $$cost_all has been taken from your account.";
 			if($sender->hasPermission("essentials.repair.armor")){
 				foreach($sender->getArmorInventory()->getContents() as $index => $item){
 					if($this->plugin->isRepairable($item)){
@@ -120,8 +120,8 @@ class RepairCommand extends PluginCommand{
 				$sender->sendMessage(TextFormat::RED . "[Error]" . TextFormat::DARK_RED . " You don't have permission to use this command.");
 				return true;
 			}
-			$cost_hand = $this->plugin->getConfig("cost_hand");
-			 if(EconomyAPI::getInstance()->myMoney($player) > $cost_hand){
+			$cost_hand = $this->plugin->getConfig()->getNested("cost_hand");
+			 if(EconomyAPI::getInstance()->myMoney($sender) > $cost_hand){
 				 EconomyAPI::getInstance()->reduceMoney($sender, $cost_hand);
 			$index = $sender->getInventory()->getHeldItemIndex();
 			$item = $sender->getInventory()->getItem($index);
@@ -134,7 +134,7 @@ class RepairCommand extends PluginCommand{
 			}else{
 				$sender->sendMessage(TextFormat::RED . "[Error] Item does not have any damage");
 			}
-			$m = TextFormat::GREEN . "Item successfully repaired!";
+			$m = TextFormat::GREEN . "Item successfully repaired! $$cost_hand was taken from your account.";
 		}else{
                 $sender->sendMessage(TF::BOLD . TF::DARK_GRAY . TF::RESET . TF::DARK_RED . "You do not have enough money to repair hand! You must have at least $$cost_hand");
 		}
