@@ -34,5 +34,5 @@
 # Set to false to disable.
 enableRepairSigns: true
 
-cost_all: 5000
-cost_hand: 2000
+cost_all: 50000
+cost_hand: 20000
