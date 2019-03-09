@@ -7,11 +7,11 @@ website: https://github.com/AntiCores/Repair
 
 permissions:
   repair.command.use:
-    default: op
+    default: true
   repair.command.use.hand:
-    default: op
+    default: true
   repair.command.use.all:
-    default: op
+    default: true
   repair.sign.create:
     default: op
   repair.sign.break:
