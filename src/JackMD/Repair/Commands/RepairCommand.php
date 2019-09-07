@@ -57,9 +57,9 @@ class RepairCommand extends PluginCommand{
 	public function __construct(string $name, Main $plugin){
 		parent::__construct($name, $plugin);
 		$this->setDescription("Access to repair commands.");
-		$this->setUsage("/repair [all:hand]");
-		$this->setAliases(["fix"]);
-		$this->setPermission("repair.command.use");
+		$this->setUsage("/blockedrepair [all:hand]");
+		//$this->setAliases(["blockedrepair"]);
+		//$this->setPermission("repair.command.use");
 		$this->plugin = $plugin;
 	}
 	
