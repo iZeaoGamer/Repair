@@ -113,6 +113,8 @@ class RepairCommand extends PluginCommand{
 				$sender->sendMessage(TextFormat::RED . "[Error]" . TextFormat::DARK_RED . " You don't have permission to use this command.");
 				return true;
 			}
+			if(EconomyAPI::getInstance()->myMoney($sender) < 5000){
+				$sender->sendMESS
 			$index = $sender->getInventory()->getHeldItemIndex();
 			$item = $sender->getInventory()->getItem($index);
 			if(!$this->plugin->isRepairable($item)){
